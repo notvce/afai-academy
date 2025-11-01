@@ -168,28 +168,33 @@ El sitio está optimizado para SEO con:
 
 ---
 
-## 📧 Configuración EmailJS
+## 📧 Configuración Mailtrap
 
-Para el formulario de contacto, necesitas configurar EmailJS:
+Para el formulario de contacto, necesitas configurar Mailtrap:
 
-1. Crear cuenta en [EmailJS](https://www.emailjs.com/)
-2. Crear un servicio de email
-3. Crear una plantilla de email
-4. Obtener: Service ID, Template ID, Public Key
-5. Añadir a `.env.local`:
+1. Crear cuenta en [Mailtrap](https://mailtrap.io/)
+2. Obtener tu API Token desde Settings → API Tokens
+3. Añadir a `.env.local`:
 
 ```env
-VITE_EMAILJS_SERVICE_ID=tu_service_id
-VITE_EMAILJS_TEMPLATE_ID=tu_template_id
-VITE_EMAILJS_PUBLIC_KEY=tu_public_key
+VITE_MAILTRAP_API_TOKEN=tu_mailtrap_api_token
 VITE_NOTIFICATION_EMAILS=info@afai-ia.com,direccion@afai-ia.com
 ```
 
-6. Autorizar tu dominio en EmailJS (requerido para producción):
-   - EmailJS Dashboard → Account → Domains
-   - Añade: `https://notvce.github.io`
-   - Si despliegas en otro usuario/organización, añade `https://TU_USUARIO.github.io`
-   - Espera unos minutos y vuelve a probar el formulario
+4. Para producción, añade los secretos en GitHub:
+```bash
+gh secret set VITE_MAILTRAP_API_TOKEN -R notvce/afai-academy -b "tu_token"
+gh secret set VITE_NOTIFICATION_EMAILS -R notvce/afai-academy -b "info@afai-ia.com,direccion@afai-ia.com"
+```
+
+📖 **[Ver guía completa de configuración](./MAILTRAP-SETUP.md)**
+
+### Ventajas de Mailtrap
+- ✅ Sin límites de dominio (funciona en github.io, localhost, custom domains)
+- ✅ Alta deliverability (no va a spam)
+- ✅ 1,000 emails gratis/mes
+- ✅ Emails HTML personalizados
+- ✅ Analytics y tracking
 
 ---
 

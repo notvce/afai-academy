@@ -1,5 +1,3 @@
-import emailjs from '@emailjs/browser';
-
 interface EmailData {
   name: string;
   email: string;
@@ -9,69 +7,132 @@ interface EmailData {
 
 export const sendContactFormEmail = async (data: EmailData) => {
   try {
-    // Validaciones de entorno (evita errores silenciosos en producción)
-    const PUB = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-    const SID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const TID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    // Validar variables de entorno
+    const TOKEN = import.meta.env.VITE_MAILTRAP_API_TOKEN;
+    const TO_EMAIL = import.meta.env.VITE_NOTIFICATION_EMAILS;
 
-    if (!PUB || !SID || !TID) {
+    if (!TOKEN || !TO_EMAIL) {
       const missing = [
-        !PUB ? 'VITE_EMAILJS_PUBLIC_KEY' : null,
-        !SID ? 'VITE_EMAILJS_SERVICE_ID' : null,
-        !TID ? 'VITE_EMAILJS_TEMPLATE_ID' : null,
+        !TOKEN ? 'VITE_MAILTRAP_API_TOKEN' : null,
+        !TO_EMAIL ? 'VITE_NOTIFICATION_EMAILS' : null,
       ].filter(Boolean).join(', ');
-      const err = new Error(
-        `Configuración de EmailJS incompleta (${missing}). Por favor, revisa las variables de entorno.`
+      throw new Error(
+        `Configuración de Mailtrap incompleta (${missing}). Por favor, revisa las variables de entorno.`
       );
-      // Adjunta un código para manejo en UI
-      // @ts-expect-error añadir campo custom
-      err.code = 'ENV_MISSING';
-      throw err;
     }
 
-    // Inicializar EmailJS
-    emailjs.init(PUB);
+    // Parsear destinatarios (soporta múltiples emails separados por coma)
+    const recipients = TO_EMAIL.split(',').map((email: string) => ({
+      email: email.trim(),
+    }));
 
-    // Template params para EmailJS
-    const templateParams = {
-      from_name: data.name,
-      from_email: data.email,
-      phone: data.phone,
-      message: data.message,
-      to_name: 'AFAI Academy',
-      reply_to: data.email,
+    // Preparar payload para Mailtrap API
+    const payload = {
+      from: {
+        email: "contacto@afai-academy.com",
+        name: "AFAI Academy - Formulario Web",
+      },
+      to: recipients,
+      subject: `Nueva solicitud de información - ${data.name}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+              .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }
+              .field { margin-bottom: 20px; }
+              .label { font-weight: bold; color: #F97316; margin-bottom: 5px; }
+              .value { background: white; padding: 12px; border-left: 3px solid #F97316; margin-top: 5px; }
+              .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>📧 Nueva Solicitud de Información</h1>
+                <p>AFAI Academy - Máster en IA Generativa</p>
+              </div>
+              <div class="content">
+                <div class="field">
+                  <div class="label">👤 Nombre Completo:</div>
+                  <div class="value">${data.name}</div>
+                </div>
+                <div class="field">
+                  <div class="label">📧 Correo Electrónico:</div>
+                  <div class="value"><a href="mailto:${data.email}">${data.email}</a></div>
+                </div>
+                <div class="field">
+                  <div class="label">📱 Teléfono:</div>
+                  <div class="value"><a href="tel:${data.phone}">${data.phone}</a></div>
+                </div>
+                <div class="field">
+                  <div class="label">💬 Mensaje:</div>
+                  <div class="value">${data.message.replace(/\n/g, '<br>')}</div>
+                </div>
+              </div>
+              <div class="footer">
+                <p>Este email fue enviado desde el formulario de contacto de <strong>AFAI Academy</strong></p>
+                <p>Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `,
+      text: `
+Nueva solicitud de información - AFAI Academy
+
+Nombre: ${data.name}
+Email: ${data.email}
+Teléfono: ${data.phone}
+
+Mensaje:
+${data.message}
+
+---
+Enviado desde el formulario de contacto de AFAI Academy
+Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
+      `,
+      category: "Contact Form",
     };
 
-    // Enviar correo usando EmailJS
-    const response = await emailjs.send(
-      SID,
-      TID,
-      templateParams
-    );
+    // Enviar email via Mailtrap API
+    const response = await fetch('https://send.api.mailtrap.io/api/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-    console.log('Correo enviado exitosamente:', response);
-    return response;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(
+        `Error ${response.status}: ${errorData.error || errorData.message || 'Failed to send email'}`
+      );
+    }
+
+    const result = await response.json();
+    console.log('Correo enviado exitosamente via Mailtrap:', result);
+    return result;
   } catch (error: unknown) {
     // Normaliza el error para mostrar mensajes útiles en UI
     let message = 'Error desconocido al enviar el correo.';
-    // EmailJS suele devolver { text: string } o Error con message
-    if (typeof error === 'object' && error !== null) {
+    
+    if (error instanceof Error) {
+      message = error.message;
+    } else if (typeof error === 'object' && error !== null) {
       const anyErr = error as Record<string, unknown>;
-      if (typeof anyErr.text === 'string') message = anyErr.text;
       if (typeof anyErr.message === 'string') message = anyErr.message;
-      // reexpone código si existe (e.g., ENV_MISSING)
-      type WithCode = { code?: string };
-      const maybeCode = error as WithCode;
-      if (maybeCode.code) {
-        throw Object.assign(new Error(message), { code: maybeCode.code });
-      }
+      if (typeof anyErr.error === 'string') message = anyErr.error;
     }
-    // Añade un hint común cuando el dominio no está autorizado en EmailJS
-    if (typeof window !== 'undefined' && window.location.host.endsWith('github.io')) {
-      message += ' | Sugerencia: autoriza tu dominio en EmailJS (Account → Domains)';
-    }
-    const err = new Error(message);
-    console.error('Error al enviar correo:', err);
+
+    const err = new Error(`Error al enviar correo con Mailtrap: ${message}`);
+    console.error('Error detallado:', err, error);
     throw err;
   }
 };

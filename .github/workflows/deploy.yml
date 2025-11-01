@@ -17,9 +17,7 @@ concurrency:
 jobs:
   build:
     env:
-      VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
-      VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
-      VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
+      VITE_MAILTRAP_API_TOKEN: ${{ secrets.VITE_MAILTRAP_API_TOKEN }}
       VITE_NOTIFICATION_EMAILS: ${{ secrets.VITE_NOTIFICATION_EMAILS }}
     runs-on: ubuntu-latest
     steps:
