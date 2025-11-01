@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: '/',
+    build: {
+      chunkSizeWarningLimit: 600,
+    },
     server: {
       host: "::",
       port: 8080,
