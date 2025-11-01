@@ -93,17 +93,22 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       reply_to: data.email,
     };
 
+    // Preparar payload sin API key (va en headers)
+    const emailPayload = { ...payload };
+    delete emailPayload.api_key;
+
     // Enviar email via MailDiver API
-    const response = await fetch('https://api.maildiver.com/v1/send', {
+    const response = await fetch('https://smtp.maildiver.com/api/v1/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Origin': window.location.origin,
+        'X-API-KEY': API_KEY
       },
       mode: 'cors',
       credentials: 'omit',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(emailPayload),
     });
 
     if (!response.ok) {
