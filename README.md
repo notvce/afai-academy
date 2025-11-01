@@ -168,33 +168,33 @@ El sitio está optimizado para SEO con:
 
 ---
 
-## 📧 Configuración Mailtrap
+## 📧 Configuración MailDiver
 
-Para el formulario de contacto, necesitas configurar Mailtrap:
+Para el formulario de contacto, necesitas configurar MailDiver:
 
-1. Crear cuenta en [Mailtrap](https://mailtrap.io/)
-2. Obtener tu API Token desde Settings → API Tokens
+1. Crear cuenta en [MailDiver](https://maildiver.com/)
+2. Obtener tu API Key desde el dashboard
 3. Añadir a `.env.local`:
 
 ```env
-VITE_MAILTRAP_API_TOKEN=tu_mailtrap_api_token
+VITE_MAILDIVER_API_KEY=tu_maildiver_api_key
 VITE_NOTIFICATION_EMAILS=info@afai-ia.com,direccion@afai-ia.com
 ```
 
 4. Para producción, añade los secretos en GitHub:
 ```bash
-gh secret set VITE_MAILTRAP_API_TOKEN -R notvce/afai-academy -b "tu_token"
+gh secret set VITE_MAILDIVER_API_KEY -R notvce/afai-academy -b "tu_api_key"
 gh secret set VITE_NOTIFICATION_EMAILS -R notvce/afai-academy -b "info@afai-ia.com,direccion@afai-ia.com"
 ```
 
-📖 **[Ver guía completa de configuración](./MAILTRAP-SETUP.md)**
+📖 **[Ver guía completa de configuración](./MAILDIVER-SETUP.md)**
 
-### Ventajas de Mailtrap
-- ✅ Sin límites de dominio (funciona en github.io, localhost, custom domains)
-- ✅ Alta deliverability (no va a spam)
-- ✅ 1,000 emails gratis/mes
+### Ventajas de MailDiver
+- ✅ Simple y rápido de configurar
+- ✅ Sin límites de dominio
+- ✅ Alta deliverability
 - ✅ Emails HTML personalizados
-- ✅ Analytics y tracking
+- ✅ Económico y confiable
 
 ---
 

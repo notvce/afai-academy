@@ -8,31 +8,25 @@ interface EmailData {
 export const sendContactFormEmail = async (data: EmailData) => {
   try {
     // Validar variables de entorno
-    const TOKEN = import.meta.env.VITE_MAILTRAP_API_TOKEN;
+    const API_KEY = import.meta.env.VITE_MAILDIVER_API_KEY;
     const TO_EMAIL = import.meta.env.VITE_NOTIFICATION_EMAILS;
 
-    if (!TOKEN || !TO_EMAIL) {
+    if (!API_KEY || !TO_EMAIL) {
       const missing = [
-        !TOKEN ? 'VITE_MAILTRAP_API_TOKEN' : null,
+        !API_KEY ? 'VITE_MAILDIVER_API_KEY' : null,
         !TO_EMAIL ? 'VITE_NOTIFICATION_EMAILS' : null,
       ].filter(Boolean).join(', ');
       throw new Error(
-        `Configuración de Mailtrap incompleta (${missing}). Por favor, revisa las variables de entorno.`
+        `Configuración de MailDiver incompleta (${missing}). Por favor, revisa las variables de entorno.`
       );
     }
 
-    // Parsear destinatarios (soporta múltiples emails separados por coma)
-    const recipients = TO_EMAIL.split(',').map((email: string) => ({
-      email: email.trim(),
-    }));
-
-    // Preparar payload para Mailtrap API
+    // Preparar payload para MailDiver API
     const payload = {
-      from: {
-        email: "contacto@afai-academy.com",
-        name: "AFAI Academy - Formulario Web",
-      },
-      to: recipients,
+      api_key: API_KEY,
+      to: TO_EMAIL,
+      from: "contacto@afai-academy.com",
+      from_name: "AFAI Academy - Formulario Web",
       subject: `Nueva solicitud de información - ${data.name}`,
       html: `
         <!DOCTYPE html>
@@ -96,14 +90,13 @@ ${data.message}
 Enviado desde el formulario de contacto de AFAI Academy
 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       `,
-      category: "Contact Form",
+      reply_to: data.email,
     };
 
-    // Enviar email via Mailtrap API
-    const response = await fetch('https://send.api.mailtrap.io/api/send', {
+    // Enviar email via MailDiver API
+    const response = await fetch('https://api.maildiver.com/v1/send', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${TOKEN}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
@@ -117,7 +110,7 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
     }
 
     const result = await response.json();
-    console.log('Correo enviado exitosamente via Mailtrap:', result);
+    console.log('Correo enviado exitosamente via MailDiver:', result);
     return result;
   } catch (error: unknown) {
     // Normaliza el error para mostrar mensajes útiles en UI
@@ -131,7 +124,7 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       if (typeof anyErr.error === 'string') message = anyErr.error;
     }
 
-    const err = new Error(`Error al enviar correo con Mailtrap: ${message}`);
+    const err = new Error(`Error al enviar correo con MailDiver: ${message}`);
     console.error('Error detallado:', err, error);
     throw err;
   }
