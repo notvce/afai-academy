@@ -98,15 +98,30 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Origin': window.location.origin,
       },
+      mode: 'cors',
+      credentials: 'omit',
       body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new Error(
-        `Error ${response.status}: ${errorData.error || errorData.message || 'Failed to send email'}`
-      );
+      const errorText = await response.text();
+      let errorMessage = `Error HTTP ${response.status}`;
+      try {
+        const errorData = JSON.parse(errorText);
+        errorMessage = `Error ${response.status}: ${errorData.error || errorData.message || errorText}`;
+      } catch {
+        errorMessage += `: ${errorText}`;
+      }
+      console.error('Respuesta detallada de MailDiver:', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: errorText
+      });
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
