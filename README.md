@@ -185,6 +185,12 @@ VITE_EMAILJS_PUBLIC_KEY=tu_public_key
 VITE_NOTIFICATION_EMAILS=info@afai-ia.com,direccion@afai-ia.com
 ```
 
+6. Autorizar tu dominio en EmailJS (requerido para producción):
+   - EmailJS Dashboard → Account → Domains
+   - Añade: `https://notvce.github.io`
+   - Si despliegas en otro usuario/organización, añade `https://TU_USUARIO.github.io`
+   - Espera unos minutos y vuelve a probar el formulario
+
 ---
 
 ## 📁 Estructura del Proyecto

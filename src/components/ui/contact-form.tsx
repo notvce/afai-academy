@@ -31,12 +31,14 @@ export function ContactForm({ children, variant = "header" }: ContactFormProps) 
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState<string>("")
   const [open, setOpen] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setSubmitStatus('idle')
+  setSubmitStatus('idle')
+  setErrorMessage("")
 
     try {
       await sendContactFormEmail(formData)
@@ -56,6 +58,10 @@ export function ContactForm({ children, variant = "header" }: ContactFormProps) 
     } catch (error) {
       console.error('Error:', error)
       setSubmitStatus('error')
+      const msg = (error instanceof Error && error.message)
+        ? error.message
+        : 'No pudimos enviar tu mensaje.'
+      setErrorMessage(msg)
     } finally {
       setIsSubmitting(false)
     }
@@ -162,7 +168,9 @@ export function ContactForm({ children, variant = "header" }: ContactFormProps) 
                 <Alert className="bg-red-50 border-red-200">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <AlertDescription className="text-red-800">
-                    Hubo un error al enviar el formulario. Por favor, intenta de nuevo.
+                    Hubo un error al enviar el formulario. {errorMessage ? (<>
+                      <span className="font-medium">Detalle:</span> {errorMessage}
+                    </>) : 'Por favor, intenta de nuevo.'}
                   </AlertDescription>
                 </Alert>
               </motion.div>
