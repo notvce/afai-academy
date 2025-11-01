@@ -93,32 +93,20 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       reply_to: data.email,
     };
 
-    // Procesar lista de destinatarios
-    const recipients = TO_EMAIL.split(',').map(email => email.trim());
-
-    // Preparar payload para la API de MailDiver
-    const emailPayload = {
-      to: recipients,
-      from: {
-        email: "contacto@afai-academy.com",
-        name: "AFAI Academy - Formulario Web"
-      },
-      reply_to: data.email,
-      subject: `Nueva solicitud de información - ${data.name}`,
-      html: payload.html,
-      text: payload.text
-    };
-
-    // Llamada directa a MailDiver
-    const response = await fetch('https://api.maildiver.com/v1/send', {
+    // Llamada a nuestra función serverless
+    const response = await fetch('/.netlify/functions/send-email', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`,
-        'Origin': 'https://afai-ia.com'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(emailPayload),
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+        html: payload.html,
+        text: payload.text
+      })
     });
 
     if (!response.ok) {
