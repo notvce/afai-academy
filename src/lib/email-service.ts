@@ -93,46 +93,66 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
       reply_to: data.email,
     };
 
-    // Preparar payload sin API key (va en headers)
-    const emailPayload = { ...payload };
-    delete emailPayload.api_key;
+    // Procesar lista de destinatarios
+    const recipients = TO_EMAIL.split(',').map(email => email.trim());
 
-    // Usar proxy CORS para MailDiver
-    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-    const response = await fetch(`${PROXY_URL}https://send.maildiver.com/api/v1/email`, {
+    // Preparar payload para la API de MailDiver
+    const emailPayload = {
+      to: recipients,
+      from: {
+        email: "contacto@afai-academy.com",
+        name: "AFAI Academy - Formulario Web"
+      },
+      reply_to: data.email,
+      subject: `Nueva solicitud de información - ${data.name}`,
+      html: payload.html,
+      text: payload.text
+    };
+
+    // Llamada directa a MailDiver
+    const response = await fetch('https://api.maildiver.com/v1/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'x-api-key': API_KEY
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+        'Origin': 'https://afai-ia.com'
       },
-      body: JSON.stringify({
-        to: [TO_EMAIL],
-        from: {
-          email: emailPayload.from,
-          name: emailPayload.from_name
-        },
-        subject: emailPayload.subject,
-        html_body: emailPayload.html,
-        text_body: emailPayload.text
-      }),
+      body: JSON.stringify(emailPayload),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      let errorMessage = `Error HTTP ${response.status}`;
+      let errorMessage = 'Error al enviar el correo';
+      
       try {
         const errorData = JSON.parse(errorText);
-        errorMessage = `Error ${response.status}: ${errorData.error || errorData.message || errorText}`;
+        if (response.status === 401) {
+          errorMessage = 'Error de autenticación con MailDiver. Por favor, verifica la API key.';
+        } else if (response.status === 403) {
+          errorMessage = 'No tienes permiso para enviar correos. Verifica tu cuenta de MailDiver.';
+        } else if (response.status === 429) {
+          errorMessage = 'Has excedido el límite de envíos. Por favor, intenta más tarde.';
+        } else {
+          errorMessage = errorData.message || errorData.error || `Error del servidor: ${response.status}`;
+        }
       } catch {
-        errorMessage += `: ${errorText}`;
+        if (response.status >= 500) {
+          errorMessage = 'Error temporal del servidor. Por favor, intenta más tarde.';
+        } else if (response.status === 0 || !navigator.onLine) {
+          errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
+        }
       }
-      console.error('Respuesta detallada de MailDiver:', {
+      
+      console.error('Error detallado de MailDiver:', {
         status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-        body: errorText
+        text: errorText,
+        payload: {
+          ...emailPayload,
+          to: recipients.length + ' destinatarios'
+        }
       });
+      
       throw new Error(errorMessage);
     }
 
