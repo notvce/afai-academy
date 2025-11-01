@@ -97,17 +97,25 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
     const emailPayload = { ...payload };
     delete emailPayload.api_key;
 
-    // URL alternativa para MailDiver
-    const response = await fetch('https://api.maildiver.com/send', {
+    // Usar proxy CORS para MailDiver
+    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+    const response = await fetch(`${PROXY_URL}https://send.maildiver.com/api/v1/email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Origin': window.location.origin,
-        'Authorization': `Bearer ${API_KEY}`
+        'X-Requested-With': 'XMLHttpRequest',
+        'x-api-key': API_KEY
       },
-      mode: 'cors',
-      body: JSON.stringify(emailPayload),
+      body: JSON.stringify({
+        to: [TO_EMAIL],
+        from: {
+          email: emailPayload.from,
+          name: emailPayload.from_name
+        },
+        subject: emailPayload.subject,
+        html_body: emailPayload.html,
+        text_body: emailPayload.text
+      }),
     });
 
     if (!response.ok) {
