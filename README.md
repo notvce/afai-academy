@@ -2,7 +2,7 @@
 
 > Academia de Formación de Alto Impacto - Plataforma educativa especializada en Inteligencia Artificial
 
-[![Deploy Status](https://github.com/TU_USUARIO/afai-academy/actions/workflows/deploy.yml/badge.svg)](https://github.com/TU_USUARIO/afai-academy/actions)
+[![Deploy Status](https://github.com/notvce/afai-academy/actions/workflows/deploy.yml/badge.svg)](https://github.com/notvce/afai-academy/actions)
 [![Built with Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite)](https://vitejs.dev)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript)](https://www.typescriptlang.org)
@@ -11,7 +11,7 @@
 
 ## 🚀 Demo en Vivo
 
-**🌐 [Ver Sitio](https://TU_USUARIO.github.io/afai-academy/)**
+**🌐 [Ver Sitio](https://notvce.github.io/afai-academy/)**
 
 ---
 
@@ -83,7 +83,7 @@
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/TU_USUARIO/afai-academy.git
+git clone https://github.com/notvce/afai-academy.git
 cd afai-academy
 
 # Instalar dependencias
@@ -121,7 +121,7 @@ El proyecto usa GitHub Actions para deploy automático a GitHub Pages.
 1. **Crear repositorio en GitHub**
 2. **Conectar y push**:
    ```bash
-   git remote add origin https://github.com/TU_USUARIO/afai-academy.git
+   git remote add origin https://github.com/notvce/afai-academy.git
    git push -u origin main
    ```
 3. **Configurar GitHub Pages**:
