@@ -5,19 +5,12 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Inlineo explícito de variables VITE_* si existen en el entorno del runner (CI)
-  // De esta forma garantizamos que queden embebidas en el bundle en GitHub Actions.
-  const defineEnv: Record<string, string> = {};
-  if (process.env.VITE_MAILDIVER_API_KEY) {
-    defineEnv["import.meta.env.VITE_MAILDIVER_API_KEY"] = JSON.stringify(
-      process.env.VITE_MAILDIVER_API_KEY
-    );
-  }
-  if (process.env.VITE_NOTIFICATION_EMAILS) {
-    defineEnv["import.meta.env.VITE_NOTIFICATION_EMAILS"] = JSON.stringify(
-      process.env.VITE_NOTIFICATION_EMAILS
-    );
-  }
+  // Ensure all VITE_ environment variables are properly embedded
+  const defineEnv: Record<string, string> = Object.fromEntries(
+    Object.entries(process.env)
+      .filter(([key]) => key.startsWith('VITE_'))
+      .map(([key, value]) => [`import.meta.env.${key}`, JSON.stringify(value)])
+  );
 
   return {
     base: '/',

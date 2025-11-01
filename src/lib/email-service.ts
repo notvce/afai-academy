@@ -7,18 +7,9 @@ interface EmailData {
 
 export const sendContactFormEmail = async (data: EmailData) => {
   try {
-    // Validar variables de entorno
-    const API_KEY = import.meta.env.VITE_MAILDIVER_API_KEY;
-    const TO_EMAIL = import.meta.env.VITE_NOTIFICATION_EMAILS;
-
-      // Debug: verificar variables
-      console.log('MailDiver Config Check:', {
-        hasApiKey: !!API_KEY,
-        apiKeyLength: API_KEY?.length || 0,
-        hasToEmail: !!TO_EMAIL,
-        toEmail: TO_EMAIL,
-        allEnvVars: Object.keys(import.meta.env).filter(k => k.startsWith('VITE_'))
-      });
+    // Valores de respaldo en caso de que fallen las variables de entorno
+    const API_KEY = import.meta.env?.VITE_MAILDIVER_API_KEY || "v1_plU5AQb3dMDX5ueWSz4QMrvhKVbRqqzWxmXzYd7I";
+    const TO_EMAIL = import.meta.env?.VITE_NOTIFICATION_EMAILS || "info@afai-ia.com,direccion@afai-ia.com";
 
     if (!API_KEY || !TO_EMAIL) {
       const missing = [
