@@ -11,6 +11,15 @@ export const sendContactFormEmail = async (data: EmailData) => {
     const API_KEY = import.meta.env.VITE_MAILDIVER_API_KEY;
     const TO_EMAIL = import.meta.env.VITE_NOTIFICATION_EMAILS;
 
+      // Debug: verificar variables
+      console.log('MailDiver Config Check:', {
+        hasApiKey: !!API_KEY,
+        apiKeyLength: API_KEY?.length || 0,
+        hasToEmail: !!TO_EMAIL,
+        toEmail: TO_EMAIL,
+        allEnvVars: Object.keys(import.meta.env).filter(k => k.startsWith('VITE_'))
+      });
+
     if (!API_KEY || !TO_EMAIL) {
       const missing = [
         !API_KEY ? 'VITE_MAILDIVER_API_KEY' : null,
