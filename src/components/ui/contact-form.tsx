@@ -36,12 +36,16 @@ export function ContactForm({ children, variant = "header" }: ContactFormProps) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return; // Prevenir envíos múltiples
+
     setIsSubmitting(true)
-  setSubmitStatus('idle')
-  setErrorMessage("")
+    setSubmitStatus('idle')
+    setErrorMessage("")
 
     try {
-      await sendContactFormEmail(formData)
+      const result = await sendContactFormEmail(formData)
+      console.log('Respuesta del servidor:', result);
+      
       setSubmitStatus('success')
       setFormData({
         name: "",
@@ -56,11 +60,21 @@ export function ContactForm({ children, variant = "header" }: ContactFormProps) 
         setSubmitStatus('idle')
       }, 3000)
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error detallado:', error)
       setSubmitStatus('error')
-      const msg = (error instanceof Error && error.message)
-        ? error.message
-        : 'No pudimos enviar tu mensaje.'
+      let msg = 'No pudimos enviar tu mensaje.'
+      
+      if (error instanceof Error) {
+        msg = error.message
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        msg = String(error.message)
+      }
+      
+      // Si es un error de red, dar un mensaje más específico
+      if (msg.includes('Failed to fetch')) {
+        msg = 'Error de conexión. Por favor, verifica tu conexión a internet y vuelve a intentarlo.'
+      }
+      
       setErrorMessage(msg)
     } finally {
       setIsSubmitting(false)

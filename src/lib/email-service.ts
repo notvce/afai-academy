@@ -97,17 +97,16 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'America/Guayaquil' })}
     const emailPayload = { ...payload };
     delete emailPayload.api_key;
 
-    // Enviar email via MailDiver API
-    const response = await fetch('https://smtp.maildiver.com/api/v1/send', {
+    // URL alternativa para MailDiver
+    const response = await fetch('https://api.maildiver.com/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Origin': window.location.origin,
-        'X-API-KEY': API_KEY
+        'Authorization': `Bearer ${API_KEY}`
       },
       mode: 'cors',
-      credentials: 'omit',
       body: JSON.stringify(emailPayload),
     });
 
