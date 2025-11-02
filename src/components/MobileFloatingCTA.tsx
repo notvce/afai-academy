@@ -1,34 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
-import { ContactButton } from "@/components/ui/contact-button";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-
 /**
- * Botón CTA flotante para móviles
- * Aparece al hacer scroll, solo en pantallas < 768px
+ * Botón CTA flotante para móviles - Actualmente desactivado
  */
 export const MobileFloatingCTA = () => {
-  const isMobile = useIsMobile();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      // Mostrar después del hero (aprox 600px)
-      const shouldShow = window.scrollY > 600;
-      // Ocultar cerca del footer (últimos 400px)
-      const nearFooter = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 400;
-      
-      setIsVisible(shouldShow && !nearFooter);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check inicial
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
+  return null; // Componente desactivado temporalmente
 
   // No renderizar en desktop
   if (!isMobile) return null;

@@ -1,29 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Phone, MessageSquare, Home, BookOpen } from "lucide-react";
-import { ContactButton } from "@/components/ui/contact-button";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-
 /**
- * Barra de navegación flotante optimizada para móviles
- * Solo se muestra en pantallas < 768px
+ * Barra de navegación flotante optimizada para móviles - Actualmente desactivada
  */
 export const MobileBottomNav = () => {
-  const isMobile = useIsMobile();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      // Mostrar después de 200px de scroll
-      setIsVisible(window.scrollY > 200);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
+  return null; // Componente desactivado temporalmente
 
   // No renderizar en desktop
   if (!isMobile) return null;
