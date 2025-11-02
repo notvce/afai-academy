@@ -25,8 +25,6 @@
 - ✅ **Glassmorphism** effects
 
 ### 📱 Optimización Móvil
-- ✅ **Bottom navigation** flotante
-- ✅ **CTA flotante** inteligente
 - ✅ **Touch targets** optimizados (WCAG 2.1)
 - ✅ **Scroll suave** nativo
 - ✅ **Teclados nativos** (tel, email)
@@ -41,11 +39,9 @@
 - ✅ **PWA Manifest**
 
 ### 📧 Funcionalidades
-- ✅ **Formulario de contacto** con EmailJS
-- ✅ **Validación** en tiempo real
-- ✅ **Feedback visual** (loading, success, error)
-- ✅ **Envío dual** (usuario + organización)
-- ✅ **Auto-cierre** del modal
+- ✅ **Enlaces de contacto** directo
+- ✅ **Mailto links** optimizados
+- ✅ **Cliente email** nativo
 
 ### 🎯 Componentes
 - ✅ Hero section con estadísticas animadas
