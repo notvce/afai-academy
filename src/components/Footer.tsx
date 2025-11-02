@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, ArrowRight, Sparkles } from "lucide-react";
-import { ContactForm } from "@/components/ui/contact-form";
+import { ContactButton } from "@/components/ui/contact-button";
 
 const Footer = () => {
 
@@ -27,12 +27,12 @@ const Footer = () => {
               <p className="text-lg mb-6 text-white/90 max-w-2xl mx-auto">
                 Únete a miles de profesionales que ya están dominando la Inteligencia Artificial
               </p>
-              <ContactForm variant="footer">
+              <ContactButton variant="footer">
                 <Button className="bg-white text-orange-primary hover:bg-gray-100 font-semibold px-8 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
                   Más Información
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </ContactForm>
+              </ContactButton>
             </CardContent>
           </Card>
         </div>

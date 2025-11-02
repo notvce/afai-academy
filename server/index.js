@@ -1,19 +1,47 @@
-const http = require('http');
-const nodemailer = require('nodemailer');
-require('dotenv').config({ path: '.env.local' });
+import http from 'http';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
 
 // Configurar el transporter de nodemailer
+// Validar variables de entorno requeridas
+const requiredEnvVars = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`Error: ${envVar} no está definido en las variables de entorno`);
+    process.exit(1);
+  }
+}
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || '587'),
+  port: parseInt(process.env.SMTP_PORT || '465'),
   secure: process.env.SMTP_SECURE === 'true',
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  tls: {
+    rejectUnauthorized: false,
+    minVersion: 'TLSv1.2'
+  },
+  debug: true // Habilitar logs de debug
+});
+
+// Verificar la conexión SMTP antes de iniciar el servidor
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('Error al verificar la conexión SMTP:', error);
+    process.exit(1);
+  } else {
+    console.log('Servidor SMTP está listo para enviar emails');
+  }
 });
 
 const server = http.createServer(async (req, res) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  
   // Configurar CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -41,7 +69,7 @@ const server = http.createServer(async (req, res) => {
         await transporter.sendMail({
           from: {
             name: 'AFAI Academy',
-            address: process.env.SMTP_FROM || 'noreply@afai-ia.com'
+            address: process.env.SMTP_FROM || 'info@afai-ia.com'
           },
           to: TO_EMAIL.split(',').map(email => email.trim()),
           replyTo: `"${data.name}" <${data.email}>`,
@@ -78,7 +106,7 @@ const server = http.createServer(async (req, res) => {
         await transporter.sendMail({
           from: {
             name: 'AFAI Academy',
-            address: process.env.SMTP_FROM || 'noreply@afai-ia.com'
+            address: process.env.SMTP_FROM || 'info@afai-ia.com'
           },
           to: `"${data.name}" <${data.email}>`,
           subject: 'Hemos recibido tu mensaje - AFAI Academy',
@@ -115,10 +143,13 @@ const server = http.createServer(async (req, res) => {
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Emails enviados correctamente' }));
-      } catch (error) {
-        console.error('Error al enviar los emails:', error);
+            } catch (error) {
+        console.error('Error al enviar email:', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: error.message || 'Error al enviar los emails' }));
+        res.end(JSON.stringify({ 
+          error: 'Error interno del servidor',
+          details: error.message
+        }));
       }
     });
   } else {

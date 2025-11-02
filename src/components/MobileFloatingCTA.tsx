@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
-import { ContactForm } from "@/components/ui/contact-form";
+import { ContactButton } from "@/components/ui/contact-button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -43,14 +43,14 @@ export const MobileFloatingCTA = () => {
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           className="fixed bottom-20 right-4 z-40 md:hidden"
         >
-          <ContactForm variant="mobile-floating">
+          <ContactButton variant="mobile-floating">
             <Button
               size="lg"
               className="h-14 w-14 rounded-full bg-gradient-to-br from-orange-primary to-orange-dark hover:from-orange-dark hover:to-orange-primary text-white shadow-2xl hover:shadow-orange-primary/50 transition-all duration-300 active:scale-95 touch-manipulation"
             >
               <Phone className="w-6 h-6" />
             </Button>
-          </ContactForm>
+          </ContactButton>
         </motion.div>
       )}
     </AnimatePresence>

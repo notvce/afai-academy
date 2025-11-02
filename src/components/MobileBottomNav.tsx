@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Phone, MessageSquare, Home, BookOpen } from "lucide-react";
-import { ContactForm } from "@/components/ui/contact-form";
+import { ContactButton } from "@/components/ui/contact-button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -57,14 +57,14 @@ export const MobileBottomNav = () => {
                     <span className="text-xs font-medium">{item.label}</span>
                   </a>
                 ))}
-                <ContactForm variant="mobile">
+                <ContactButton variant="mobile">
                   <button className="flex flex-col items-center gap-1 text-orange-primary hover:text-orange-dark transition-colors active:scale-95 touch-manipulation min-w-[64px]">
                     <div className="w-10 h-10 bg-gradient-to-br from-orange-primary to-orange-dark rounded-full flex items-center justify-center shadow-lg">
                       <Phone className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-xs font-medium">Contacto</span>
                   </button>
-                </ContactForm>
+                </ContactButton>
               </div>
             </div>
           </div>

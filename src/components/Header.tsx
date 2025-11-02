@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import { ContactForm } from "@/components/ui/contact-form";
+import { ContactButton } from "@/components/ui/contact-button";
 
 const Header = () => {
   const navItems = [
@@ -37,11 +37,11 @@ const Header = () => {
           </div>
           
           {/* Desktop CTA Button */}
-          <ContactForm variant="header">
+          <ContactButton variant="header">
             <Button className="hidden md:flex bg-gradient-to-r from-orange-primary to-orange-dark hover:from-orange-dark hover:to-orange-primary text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
               Inscríbete
             </Button>
-          </ContactForm>
+          </ContactButton>
 
           {/* Mobile Menu */}
           <Sheet>
@@ -68,11 +68,11 @@ const Header = () => {
                     {item.label}
                   </a>
                 ))}
-                <ContactForm variant="header">
+                <ContactButton variant="header">
                   <Button className="bg-gradient-to-r from-orange-primary to-orange-dark text-white mt-4 w-full">
                     Inscríbete
                   </Button>
-                </ContactForm>
+                </ContactButton>
               </div>
             </SheetContent>
           </Sheet>
