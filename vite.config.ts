@@ -19,7 +19,6 @@ export default defineConfig({
     },
   },
   define: {
-    'import.meta.env.VITE_BREVO_API_KEY': JSON.stringify(process.env.VITE_BREVO_API_KEY),
-    'import.meta.env.VITE_NOTIFICATION_EMAILS': JSON.stringify(process.env.VITE_NOTIFICATION_EMAILS),
+    // No se necesitan variables de entorno para el cliente ya que usamos un servidor local
   }
 });
