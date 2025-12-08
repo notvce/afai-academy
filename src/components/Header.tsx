@@ -2,15 +2,36 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { ContactButton } from "@/components/ui/contact-button";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const navItems = [
     { href: "#inicio", label: "Inicio" },
     { href: "#formacion", label: "Formación" },
     { href: "#metodologia", label: "Metodología" },
     { href: "#certificacion", label: "Certificación" },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  };
 
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -30,7 +51,8 @@ const Header = () => {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-foreground hover:text-orange-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-primary after:transition-all after:duration-300 hover:after:w-full"
+                onClick={(e) => handleNavClick(e, item.href.substring(1))}
+                className="text-foreground hover:text-orange-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-orange-primary after:transition-all after:duration-300 hover:after:w-full cursor-pointer"
               >
                 {item.label}
               </a>
@@ -66,7 +88,8 @@ const Header = () => {
                   <a
                     key={item.href}
                     href={item.href}
-                    className="text-lg font-medium text-foreground hover:text-orange-primary transition-colors"
+                    onClick={(e) => handleNavClick(e, item.href.substring(1))}
+                    className="text-lg font-medium text-foreground hover:text-orange-primary transition-colors cursor-pointer"
                   >
                     {item.label}
                   </a>

@@ -94,7 +94,7 @@ const MethodologySection: React.FC = () => {
   ];
 
   return (
-    <div className="py-20 lg:py-32 bg-background relative overflow-hidden">
+    <div id="metodologia" className="py-20 lg:py-32 bg-background relative overflow-hidden">
       {/* Background decoration */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}

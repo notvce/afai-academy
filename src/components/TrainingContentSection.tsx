@@ -18,7 +18,7 @@ const TrainingContentSection = () => {
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-gradient-to-b from-background to-gray-50/50 relative overflow-hidden">
+    <section id="formacion" className="py-20 lg:py-32 bg-gradient-to-b from-background to-gray-50/50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-slate-100/50 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] -z-10" />
       

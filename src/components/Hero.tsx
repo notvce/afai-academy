@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Globe, Users, Laptop, ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { fadeInUp, springTransition } from "@/lib/animations";
-import { ContactForm } from "@/components/ContactForm";
+
 
 interface StatItemProps {
   icon: React.ElementType;
@@ -80,7 +80,7 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center bg-gradient-to-b from-background via-gray-50/50 to-background py-20 lg:py-32 overflow-hidden">
+    <div id="inicio" className="relative min-h-screen flex flex-col justify-center bg-gradient-to-b from-background via-gray-50/50 to-background py-20 lg:py-32 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
       <motion.div
