@@ -45,10 +45,10 @@ const Footer = () => {
               © 2025 AFAI Academy. Todos los derechos reservados.
             </p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-orange-primary text-sm transition-colors">
+              <a href="/#/terminos-y-condiciones" className="text-gray-400 hover:text-orange-primary text-sm transition-colors">
                 Términos y Condiciones
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-primary text-sm transition-colors">
+              <a href="/#/politica-de-privacidad" className="text-gray-400 hover:text-orange-primary text-sm transition-colors">
                 Política de Privacidad
               </a>
             </div>

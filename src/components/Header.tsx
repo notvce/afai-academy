@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { ContactButton } from "@/components/ui/contact-button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const navItems = [
@@ -15,13 +16,13 @@ const Header = () => {
     <header className="bg-background/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
-          <a href="#inicio" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img 
               src="/logo-afai.png" 
               alt="AFAI - Academia de Formación de Alto Impacto" 
               className="h-12 md:h-14 w-auto object-contain hover:scale-105 transition-transform duration-300"
             />
-          </a>
+          </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -53,11 +54,13 @@ const Header = () => {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <div className="flex flex-col gap-6 mt-8">
                 <div className="flex justify-center mb-4">
-                  <img 
-                    src="/logo-afai.png" 
-                    alt="AFAI Academy" 
-                    className="h-12 w-auto object-contain"
-                  />
+                  <Link to="/">
+                    <img 
+                      src="/logo-afai.png" 
+                      alt="AFAI Academy" 
+                      className="h-12 w-auto object-contain"
+                    />
+                  </Link>
                 </div>
                 {navItems.map((item) => (
                   <a
