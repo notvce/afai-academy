@@ -10,16 +10,29 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     minify: 'terser',
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 500,
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2
+      },
+      mangle: {
+        safari10: true
+      },
+      format: {
+        comments: false
       }
     },
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
+          'motion': ['framer-motion'],
+          'query': ['@tanstack/react-query'],
           'ui-vendor': [
             '@radix-ui/react-accordion',
             '@radix-ui/react-alert-dialog',
@@ -28,9 +41,21 @@ export default defineConfig({
             '@radix-ui/react-dropdown-menu',
             '@radix-ui/react-label',
             '@radix-ui/react-slot',
-            '@radix-ui/react-toast'
+            '@radix-ui/react-toast',
+            '@radix-ui/react-tooltip'
           ]
-        }
+        },
+        // Optimize asset file names
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.') || [];
+          const ext = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
+            return `assets/images/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js'
       }
     }
   },

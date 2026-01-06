@@ -42,6 +42,8 @@ const Header = () => {
               src="/logo-afai.png" 
               alt="AFAI - Academia de Formación de Alto Impacto" 
               className="h-12 md:h-14 w-auto object-contain hover:scale-105 transition-transform duration-300"
+              loading="eager"
+              fetchpriority="high"
             />
           </Link>
           
@@ -81,6 +83,7 @@ const Header = () => {
                       src="/logo-afai.png" 
                       alt="AFAI Academy" 
                       className="h-12 w-auto object-contain"
+                      loading="lazy"
                     />
                   </Link>
                 </div>
